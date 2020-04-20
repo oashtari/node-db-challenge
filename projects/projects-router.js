@@ -78,52 +78,122 @@ router.post('/', (req, res) => {
         });
 });
 
+// GET PROJECT BY ID
+
+router.get('/:id', (req, res) => {
+    const { id } = req.params;
+
+    Projects.findById(id)
+        .then(project => {
+            if (project) {
+                res.json(project);
+            } else {
+                res.status(404).json({ message: 'Could not find project with given id.' })
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to get projects' });
+        });
+});
+
+// GET TASK BY ID
+
+router.get('/tasks/:id', (req, res) => {
+    const { id } = req.params;
+
+    Projects.findTaskById(id)
+        .then(task => {
+            if (task) {
+                res.json(task);
+            } else {
+                res.status(404).json({ message: 'Could not find task with given id.' })
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to get tasks' });
+        });
+});
+
+// UPDATE PROJECT
+
+router.put('/:id', (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+
+    Projects.findById(id)
+        .then(project => {
+            if (project) {
+                Projects.updateProject(changes, id)
+                    .then(updatedProject => {
+                        res.json(updatedProject);
+                    });
+            } else {
+                res.status(404).json({ message: 'Could not find project with given id' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to update project' });
+        });
+});
+
+// DELETE PROJECT
+
+router.delete('/:id', (req, res) => {
+    const { id } = req.params;
+
+    Projects.deleteProject(id)
+        .then(deleted => {
+            if (deleted) {
+                res.json({ removed: deleted });
+            } else {
+                res.status(404).json({ message: 'Could not find project with given id' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to delete project' });
+        });
+});
 
 
+// UPDATE TASK
 
-// router.get('/:id/shoppingList', (req, res) => {
+router.put('/tasks/:id', (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
 
-//     const { id } = req.params;
+    Projects.findTaskById(id)
+        .then(task => {
+            if (task) {
+                Projects.updateTask(changes, id)
+                    .then(updatedTask => {
+                        res.json(updatedTask);
+                    });
+            } else {
+                res.status(404).json({ message: 'Could not find task with given id' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to update task' });
+        });
+});
 
-//     Recipes.getShoppingList(id)
-//         .then(list => {
-//             if (list) {
-//                 res.status(200).json(list)
-//             } else {
-//                 res.status(404).json({ message: 'Could not find list for given recipe' })
-//             }
-//         })
-//         .catch(err => {
-//             res.status(500).json({ message: 'Failed to get any shopping list' });
-//         });
-// })
+// DELETE TASK
 
-// router.get('/:id/instructions', (req, res) => {
-//     const { id } = req.params;
+router.delete('/tasks/:id', (req, res) => {
+    const { id } = req.params;
 
-//     Recipes.getInstructions(id)
-//         .then(steps => {
-//             if (steps) {
-//                 res.status(200).json(steps)
-//             } else {
-//                 res.status(404).json({ message: 'Could not find instructions for this recipe' })
-//             }
-//         })
-//         .catch(err => {
-//             res.status(500).json({ message: 'Failed to get any the instructions of any sort' });
-//         });
-// })
+    Projects.deleteTask(id)
+        .then(deleted => {
+            if (deleted) {
+                res.json({ removed: deleted });
+            } else {
+                res.status(404).json({ message: 'Could not find project with given id' });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to delete project' });
+        });
+});
 
-// router.get('/ingredients/:id/recipes', (req, res) => {
-//     const { id } = req.params;
-
-//     Recipes.getIngredient(id)
-//         .then(recipe => {
-//             res.status(200).json(recipe)
-//         })
-//         .catch(err => {
-//             res.status(500).json({ message: 'no recipes with just one ingredient' })
-//         })
-// })
 
 module.exports = router;

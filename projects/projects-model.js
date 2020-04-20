@@ -6,7 +6,13 @@ module.exports = {
     addProject,
     getProjects,
     addTask,
-    getTasks //retrieving a list of tasks. ** The list of tasks should include the project name and project description **.GET
+    getTasks,
+    updateProject,
+    deleteProject,
+    updateTask,
+    deleteTask,
+    findById,
+    findTaskById
 }
 
 function addResource(resource) {
@@ -36,25 +42,51 @@ function addTask(task) {
 function getTasks() {
     return db('tasks as t')
         .join('projects as p', 'p.id', '=', 't.project_id')
-        .select('t.task_description', 'p.project_name', 'p.project_description');
+        .select('t.id', 't.task_description', 'p.project_name', 'p.project_description');
+}
+
+function findById(id) {
+    return db('projects')
+        .where({ id })
+        .first()
+}
+
+function findTaskById(id) {
+    return db('tasks')
+        .where({ id })
+        .first()
+}
+
+function updateProject(changes, id) {
+    return db('projects')
+        .where({ id })
+        .update(changes, 'id')
+        .then(() => {
+            return findById(id)
+        })
+}
+
+
+function deleteProject(id) {
+    return db('projects')
+        .where({ id })
+        .del()
 
 }
 
-// select p.project_name, p.project_description, t.task_description from tasks as t
-// join projects as p
-// on t.project_id = p.id
+function updateTask(changes, id) {
+    return db('tasks')
+        .where({ id })
+        .update(changes, 'id')
+        .then(() => {
+            return findById(id)
+        })
+}
 
-// function getShoppingList(id) {
-//     return db('recipes as r')
-//         .join('recipe_ingredients_instructions as rgi', 'r.id', '=', 'rgi.recipe_id')
-//         .join('ingredients as i', 'i.id', '=', 'rgi.ingredient_id')
-//         .select('r.recipe_name', 'i.ingredient_name', 'rgi.quantity')
-//         .where({ 'r.id': id })
-// };
+function deleteTask(id) {
+    return db('tasks')
+        .where({ id })
+        .del()
 
-// function getInstructions(id) {
-//     return db('recipes as r')
-//         .join('recipe_ingredients_instructions as rgi', 'r.id', '=', 'rgi.recipe_id')
-//         .select('r.recipe_name', 'rgi.description', 'rgi.recipe_steps')
-//         .where({ 'r.id': id })
-// };
+}
+
