@@ -4,16 +4,82 @@ const Projects = require('./projects-model');
 
 const router = express.Router();
 
+//GET RESOURCES
+router.get('/resources', (req, res) => {
+    Projects.getResources()
+        .then(resources => {
+            res.json(resources);
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to get resources' });
+        });
+});
 
-// router.get('/', (req, res) => {
-//     Recipes.getRecipes()
-//         .then(recipes => {
-//             res.json(recipes);
-//         })
-//         .catch(err => {
-//             res.status(500).json({ message: 'Failed to get recipes' });
-//         });
-// });
+
+//GET TASKS
+router.get('/tasks', (req, res) => {
+    Projects.getTasks()
+        .then(tasks => {
+            res.json(tasks);
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to get tasks' });
+        });
+});
+
+//GET PROJECTS
+router.get('/', (req, res) => {
+    Projects.getProjects()
+        .then(projects => {
+            res.json(projects);
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to get projects' });
+        });
+});
+
+// ADD RESOURCE
+
+router.post('/resources', (req, res) => {
+    const resourceInfo = req.body;
+
+    Projects.addResource(resourceInfo)
+        .then(resource => {
+            res.status(201).json(resource);
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to create new resource' });
+        });
+});
+
+// ADD TASK
+router.post('/tasks', (req, res) => {
+    const taskInfo = req.body;
+
+    Projects.addTask(taskInfo)
+        .then(task => {
+            res.status(201).json(task);
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to create new resource' });
+        });
+});
+
+// ADD PROJECT
+router.post('/', (req, res) => {
+    const projectInfo = req.body;
+
+    Projects.addProject(projectInfo)
+        .then(project => {
+            res.status(201).json(project);
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to create new resource' });
+        });
+});
+
+
+
 
 // router.get('/:id/shoppingList', (req, res) => {
 

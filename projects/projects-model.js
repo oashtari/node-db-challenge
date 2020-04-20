@@ -1,14 +1,51 @@
 const db = require('../data/db-config');
 
-// module.exports = {
-//     getRecipes,
-//     getShoppingList,
-//     getInstructions
-// }
+module.exports = {
+    addResource,
+    getResources,
+    addProject,
+    getProjects,
+    addTask,
+    getTasks //retrieving a list of tasks. ** The list of tasks should include the project name and project description **.GET
+}
 
-// function getRecipes() {
-//     return db('recipes');
-// };
+
+// function add(scheme) {
+//     return db('schemes')
+//         .insert(scheme, 'id')
+//         .then(id => {
+//             return findById(id[0])
+//         })
+// }
+function addResource(resource) {
+    return db('resources')
+        .insert(resource, 'id')
+}
+
+function getResources() {
+    return db('resources');
+}
+
+function addProject(project) {
+    return db('projects')
+        .insert(project, 'id')
+}
+
+function getProjects() {
+    return db('projects');
+
+}
+
+function addTask(task) {
+    return db('tasks')
+        .insert(task, 'id')
+}
+
+function getTasks() {
+    return db('tasks');
+
+}
+
 
 // function getShoppingList(id) {
 //     return db('recipes as r')
