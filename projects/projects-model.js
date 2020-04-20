@@ -9,14 +9,6 @@ module.exports = {
     getTasks //retrieving a list of tasks. ** The list of tasks should include the project name and project description **.GET
 }
 
-
-// function add(scheme) {
-//     return db('schemes')
-//         .insert(scheme, 'id')
-//         .then(id => {
-//             return findById(id[0])
-//         })
-// }
 function addResource(resource) {
     return db('resources')
         .insert(resource, 'id')
@@ -42,10 +34,15 @@ function addTask(task) {
 }
 
 function getTasks() {
-    return db('tasks');
+    return db('tasks as t')
+        .join('projects as p', 'p.id', '=', 't.project_id')
+        .select('t.task_description', 'p.project_name', 'p.project_description');
 
 }
 
+// select p.project_name, p.project_description, t.task_description from tasks as t
+// join projects as p
+// on t.project_id = p.id
 
 // function getShoppingList(id) {
 //     return db('recipes as r')

@@ -20,9 +20,10 @@ exports.up = function (knex) {
                 .onUpdate('CASCADE')
                 .onDelete('CASCADE')
             tbl.text('task_description', 255)
-            tbl.text('notes', 255)
                 .unique()
                 .notNullable()
+            tbl.text('notes', 255)
+                .unique()
             tbl.boolean('completed').defaultTo(false)
         })
 
