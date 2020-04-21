@@ -29,16 +29,26 @@ exports.up = function (knex) {
 
         .createTable('resources', tbl => {
             tbl.increments()
+            tbl.text('resource_name', 255)
+                .unique()
+                .notNullable()
+            tbl.text('description', 255)
+        })
+
+        .createTable('projects_resources_map', tbl => {
             tbl.integer('project_id')
                 .unsigned()
                 .notNullable()
                 .references('projects.id')
                 .onUpdate('CASCADE')
                 .onDelete('CASCADE')
-            tbl.text('resource_name', 255)
-                .unique()
+
+            tbl.integer('resource_id')
+                .unsigned()
                 .notNullable()
-            tbl.text('description', 255)
+                .references('resources.id')
+                .onUpdate('CASCADE')
+                .onDelete('CASCADE')
         })
 
 };
@@ -48,5 +58,6 @@ exports.down = function (knex) {
         .dropTableIfExists('resources')
         .dropTableIfExists('tasks')
         .dropTableIfExists('projects')
+        .dropTableIfExists('projects_resources_map')
 
 };
